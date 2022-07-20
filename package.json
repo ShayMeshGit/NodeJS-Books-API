@@ -1,5 +1,5 @@
 {
-  "name": "BookDirectory",
+  "name": "book-crud",
   "version": "1.0.0",
   "description": "Simple api for fetching book data",
   "main": "index.js",
