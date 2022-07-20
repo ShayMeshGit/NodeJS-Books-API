@@ -1,4 +1,5 @@
 const { BookModel } = require("../database/models/book.model");
+const { logger } = require("../util/logger");
 
 const getBooks = async (req, res) => {
   try {
@@ -21,7 +22,8 @@ const postBook = async (req, res) => {
 };
 
 const putUpdateBook = async (req, res) => {
-  const { bookId, title: newTitle } = req.body;
+  const { bookId } = req.params;
+  const { title, description, pageNumber, authorName } = req.body;
   try {
     const bookToUpdate = await BookModel.findById(bookId);
 
@@ -31,19 +33,23 @@ const putUpdateBook = async (req, res) => {
         .json({ message: "Could not update a book with the given id" });
     }
 
-    bookToUpdate.title = newTitle;
+    bookToUpdate.title = title;
+    bookToUpdate.description = description;
+    bookToUpdate.pageNumber = pageNumber;
+    bookToUpdate.authorName = authorName;
     await bookToUpdate.save();
 
-    res
-      .status(203)
-      .json({ message: `The book was updated with the title: ${newTitle}` });
+    res.status(203).json({
+      message: `The book with id ${bookId} was updated with the data`,
+      data: req.body,
+    });
   } catch (error) {
     res.status(404).json({ message: "An Error occurred!", error });
   }
 };
 
 const deleteBook = async (req, res) => {
-  const { bookId } = req.body;
+  const { bookId } = req.params;
   try {
     const result = await BookModel.findByIdAndRemove(bookId);
     if (!result) {

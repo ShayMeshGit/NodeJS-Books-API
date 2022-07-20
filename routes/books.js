@@ -4,11 +4,9 @@ const booksController = require("../controllers/books.controller");
 const booksRouter = express.Router();
 
 // The path is /books
-booksRouter
-  .route("/")
-  .get(booksController.getBooks)
-  .post(booksController.postBook)
-  .put(booksController.putUpdateBook)
-  .delete(booksController.deleteBook);
+booksRouter.get("/", booksController.getBooks);
+booksRouter.post("/", booksController.postBook);
+booksRouter.put("/:bookId", booksController.putUpdateBook);
+booksRouter.delete("/:bookId", booksController.deleteBook);
 
 module.exports = booksRouter;
